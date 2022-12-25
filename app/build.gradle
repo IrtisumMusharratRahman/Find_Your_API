@@ -50,6 +50,10 @@ android {
 }
 
 dependencies {
+
+    //Collapsing toolbar
+    implementation "me.onebone:toolbar-compose:2.3.5"
+
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 

@@ -30,6 +30,7 @@ import com.example.findyourapi.R
 import com.example.findyourapi.model.APIs
 import com.example.findyourapi.model.Entrie
 import com.example.findyourapi.ui.theme.ContainerBg
+import me.onebone.toolbar.*
 
 
 @Composable
@@ -38,28 +39,38 @@ fun LandingPageScreen(
 ){
     val apis = viewModel.apis.collectAsState()
     viewModel.getAPIs()
-
-
+    var entries:List<Entrie> = apis.value.entries
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Column(
-            horizontalAlignment = Alignment.Start
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 5.dp)
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SearchBar(){}
-                Filter()
+        val state = rememberCollapsingToolbarScaffoldState()
+
+        val isScrolled = state.toolbarState.isScrollInProgress
+
+        CollapsingToolbarScaffold(
+            modifier = Modifier,
+            state = state, scrollStrategy = ScrollStrategy.EnterAlways,
+            toolbar = {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 5.dp)
+                        .fillMaxWidth()
+                        .height(if(isScrolled) 0.dp else 60.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SearchBar(){
+                        entries = viewModel.getFilteredApiList(text = it)
+                    }
+                    Filter()
+                }
             }
-            ApiLst(apis = apis.value)
+        ) {
+
+            ApiLst(entries = entries)
+
         }
     }
 }

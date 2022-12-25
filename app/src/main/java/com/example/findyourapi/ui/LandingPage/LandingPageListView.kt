@@ -21,12 +21,12 @@ import com.example.findyourapi.ui.theme.ContainerBg
 import com.example.findyourapi.ui.theme.Shapes
 
 @Composable
-fun ApiLst(apis: APIs){
+fun ApiLst(entries: List<Entrie>){
     LazyColumn(
         modifier = Modifier.padding(10.dp)
     ) {
         items(
-            items = apis.entries,
+            items = entries,
             itemContent = {
                 ApiItem(entrie = it)
             })

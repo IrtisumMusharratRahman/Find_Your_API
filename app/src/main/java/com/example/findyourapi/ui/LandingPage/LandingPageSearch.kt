@@ -42,7 +42,8 @@ fun SearchBar(
         ),
         singleLine = true,
         modifier = Modifier
-            .wrapContentHeight().fillMaxWidth(fraction = 0.75f)
+            .wrapContentHeight()
+            .fillMaxWidth(fraction = 0.75f)
             .padding(2.dp)
             .background(ContainerBg, CircleShape)
             .shadow(2.dp, CircleShape)
