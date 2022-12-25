@@ -1,22 +1,35 @@
 package com.example.findyourapi.ui.LandingPage
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import android.widget.SearchView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.rememberScrollableState
+
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
+import androidx.compose.material.TextFieldDefaults.indicatorLine
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
+
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.findyourapi.R
+import com.example.findyourapi.model.APIs
 import com.example.findyourapi.model.Entrie
+import com.example.findyourapi.ui.theme.ContainerBg
 
 
 @Composable
@@ -24,30 +37,44 @@ fun LandingPageScreen(
     viewModel: LandingPageViewModel = viewModel()
 ){
     val apis = viewModel.apis.collectAsState()
+    viewModel.getAPIs()
 
-    LazyColumn() {
-        items(
-            items = apis.value.entries,
-            itemContent = {
-                ApiItem(entrie = it)
-            })
+
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 5.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SearchBar(){}
+                Filter()
+            }
+            ApiLst(apis = apis.value)
+        }
     }
 }
 
-@Composable
-fun ApiItem(entrie: Entrie){
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment= Alignment.CenterHorizontally,
-        modifier = Modifier.padding(5.dp).border(width = 1.dp, shape = RectangleShape, color = Color.Gray)
-    ) {
-        Text(text = entrie.API)
-        Text(text = entrie.Auth)
-        Text(text = entrie.Cors)
-        Text(text = entrie.HTTPS)
-        Text(text = entrie.Category)
-        Text(text = entrie.Description)
-        Text(text = entrie.Link)
-    }
 
+
+
+@Preview
+@Composable
+fun defPrev(){
+    val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link-----------------------------------------","Category")
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ){
+        Filter()
+    }
 }
