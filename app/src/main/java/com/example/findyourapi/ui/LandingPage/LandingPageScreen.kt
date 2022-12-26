@@ -1,38 +1,33 @@
 package com.example.findyourapi.ui.LandingPage
 
-import android.widget.SearchView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.rememberScrollableState
+
+import androidx.compose.foundation.*
+
 
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.TextFieldDefaults.indicatorLine
+
 import androidx.compose.runtime.*
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+
 
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
+
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
+
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.findyourapi.R
-import com.example.findyourapi.model.APIs
+
 import com.example.findyourapi.model.Entrie
 import com.example.findyourapi.ui.theme.ContainerBg
+
 import me.onebone.toolbar.*
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LandingPageScreen(
     viewModel: LandingPageViewModel = viewModel()
@@ -46,11 +41,9 @@ fun LandingPageScreen(
         color = MaterialTheme.colors.background
     ) {
         val state = rememberCollapsingToolbarScaffoldState()
-//
-//        val isScrolled = state.toolbarState.isScrollInProgress
 
-        val s = rememberLazyListState()
-        val isScrolled = s.isScrollInProgress
+        val lazyListState = rememberLazyListState()
+        val isScrolled = lazyListState.isScrollInProgress
 
         CollapsingToolbarScaffold(
             modifier = Modifier,
@@ -71,9 +64,11 @@ fun LandingPageScreen(
                 }
             }
         ) {
-
-            ApiLst(entries = entries.value)
-
+            if (apis.value.count!=0){
+                LandingPageListView(viewModel = viewModel, entries = entries)
+            }else{
+                LoadingSpinner()
+            }
         }
     }
 }
@@ -81,14 +76,32 @@ fun LandingPageScreen(
 
 
 
+@Composable
+fun LoadingSpinner(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+        CircularProgressIndicator(
+            modifier = Modifier.size(60.dp),
+            color = ContainerBg,
+            strokeWidth = 8.dp
+        )
+    }
+
+}
+
+
+
+
 @Preview
 @Composable
-fun defPrev(){
+fun DefPrev(){
     val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link-----------------------------------------","Category")
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ){
-        Filter()
+        BottomSheet(entrie = ent)
     }
 }
