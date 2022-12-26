@@ -39,15 +39,18 @@ fun LandingPageScreen(
 ){
     val apis = viewModel.apis.collectAsState()
     viewModel.getAPIs()
-    var entries:List<Entrie> = apis.value.entries
+    val entries = viewModel.entries.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         val state = rememberCollapsingToolbarScaffoldState()
+//
+//        val isScrolled = state.toolbarState.isScrollInProgress
 
-        val isScrolled = state.toolbarState.isScrollInProgress
+        val s = rememberLazyListState()
+        val isScrolled = s.isScrollInProgress
 
         CollapsingToolbarScaffold(
             modifier = Modifier,
@@ -57,19 +60,19 @@ fun LandingPageScreen(
                     modifier = Modifier
                         .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 5.dp)
                         .fillMaxWidth()
-                        .height(if(isScrolled) 0.dp else 60.dp),
+                        .height(if (isScrolled) 0.dp else 60.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SearchBar(){
-                        entries = viewModel.getFilteredApiList(text = it)
+                        viewModel.getFilteredApiList(text = it)
                     }
                     Filter()
                 }
             }
         ) {
 
-            ApiLst(entries = entries)
+            ApiLst(entries = entries.value)
 
         }
     }

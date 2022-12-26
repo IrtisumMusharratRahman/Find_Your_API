@@ -26,8 +26,8 @@ class LandingPageViewModel @Inject constructor(
     private val _categories = MutableStateFlow<Categories>(Categories(0, emptyList()))
     val categories = _categories.asStateFlow()
 
-    private val _entries = MutableStateFlow<List<Entrie>>(mutableStateListOf())
-    val entries = _entries.asStateFlow()
+    private var _entries = MutableStateFlow<List<Entrie>>(mutableStateListOf())
+    var entries = _entries.asStateFlow()
 
     fun getFilteredApiList(text:String):ArrayList<Entrie>{
         var filteredList = ArrayList<Entrie>()
@@ -37,6 +37,7 @@ class LandingPageViewModel @Inject constructor(
                 filteredList.add(ent)
             }
         }
+        _entries.value=filteredList
         return filteredList
     }
 

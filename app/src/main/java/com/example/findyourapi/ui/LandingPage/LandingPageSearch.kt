@@ -43,7 +43,7 @@ fun SearchBar(
         singleLine = true,
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(fraction = 0.75f)
+            .fillMaxWidth(fraction = 0.8f)
             .padding(2.dp)
             .background(ContainerBg, CircleShape)
             .shadow(2.dp, CircleShape)
@@ -77,6 +77,6 @@ fun Filter(){
         Image(
             painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_filter_list_24),
             contentDescription = "",
-            modifier = Modifier.size(32.dp))
+            modifier = Modifier.size(height = 32.dp, width = 25.dp))
     }
 }
