@@ -28,12 +28,14 @@ import kotlinx.coroutines.launch
 fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entrie>>){
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(initialValue = BottomSheetValue.Collapsed)
+        bottomSheetState = BottomSheetState(
+            initialValue = BottomSheetValue.Collapsed,
+        )
     )
     val coroutineScope = rememberCoroutineScope()
 
 
-    val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link-----------------------------------------","Category")
+    val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link","Category")
 
     var entrie by remember { mutableStateOf(ent) }
 
@@ -52,9 +54,9 @@ fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entr
                 bottomSheetScaffoldState.bottomSheetState.expand()
                 if (bottomSheetScaffoldState.bottomSheetState.isAnimationRunning){
                     bottomSheetScaffoldState.bottomSheetState.collapse()
+
                 }
             }
-
         }
     }
 }

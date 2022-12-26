@@ -1,6 +1,7 @@
 package com.example.findyourapi.ui.LandingPage
 
 
+import android.util.Log
 import androidx.compose.foundation.*
 
 
@@ -35,6 +36,7 @@ fun LandingPageScreen(
     val apis = viewModel.apis.collectAsState()
     viewModel.getAPIs()
     val entries = viewModel.entries.collectAsState()
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
