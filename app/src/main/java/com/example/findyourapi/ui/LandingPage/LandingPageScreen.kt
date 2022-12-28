@@ -35,7 +35,9 @@ fun LandingPageScreen(
 ){
     val apis = viewModel.apis.collectAsState()
     viewModel.getAPIs()
+    viewModel.getCategories()
     val entries = viewModel.entries.collectAsState()
+    val isFiltered = viewModel.isFiltered.collectAsState()
 
 
     Surface(
@@ -51,18 +53,32 @@ fun LandingPageScreen(
             modifier = Modifier,
             state = state, scrollStrategy = ScrollStrategy.EnterAlways,
             toolbar = {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 5.dp)
-                        .fillMaxWidth()
-                        .height(if (isScrolled) 0.dp else 60.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SearchBar(){
-                        viewModel.getFilteredApiList(text = it)
+                Column() {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
+                            .fillMaxWidth()
+                            .height(if (isScrolled) 0.dp else 60.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SearchBar(){
+                            viewModel.getFilteredApiList(text = it)
+                        }
+                        Filter(){
+                            viewModel.changeFilterStatus()
+                        }
                     }
-                    Filter()
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
+                            .fillMaxWidth()
+                            .height(if (isFiltered.value) 50.dp else 0.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ApplyFilter()
+                    }
                 }
             }
         ) {
