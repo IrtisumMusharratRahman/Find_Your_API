@@ -73,11 +73,11 @@ fun LandingPageScreen(
                         modifier = Modifier
                             .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
                             .fillMaxWidth()
-                            .height(if (isFiltered.value) 50.dp else 0.dp),
+                            .height(if (isFiltered.value) 200.dp else 0.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ApplyFilter()
+                        ApplyFilter(viewModel)
                     }
                 }
             }
