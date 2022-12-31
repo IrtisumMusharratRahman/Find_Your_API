@@ -30,12 +30,12 @@ import com.example.findyourapi.ui.theme.Shapes
 @Composable
 fun SearchBar(
     onSearch: (String) -> Unit = {}
-){
+) {
     var text by remember {
         mutableStateOf(value = "")
     }
     var hintText by remember {
-        mutableStateOf("Search..")
+        mutableStateOf("Search...")
     }
     BasicTextField(
         textStyle = TextStyle(
@@ -61,7 +61,7 @@ fun SearchBar(
             },
         value = text,
         onValueChange = {
-            text=it
+            text = it
             onSearch(it)
         }
     )
@@ -69,7 +69,7 @@ fun SearchBar(
 
 
 @Composable
-fun Filter(onCLick:() -> Unit = {}){
+fun Filter(onCLick: () -> Unit = {}) {
     Button(
         modifier = Modifier
             .wrapContentSize()
@@ -77,20 +77,31 @@ fun Filter(onCLick:() -> Unit = {}){
             .padding(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = ContainerBg),
         shape = CircleShape,
-        onClick = {onCLick()}) {
+        onClick = { onCLick() }) {
         Image(
             painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_filter_alt_24),
             contentDescription = "",
-            modifier = Modifier.size(height = 32.dp, width = 25.dp))
+            modifier = Modifier.size(height = 32.dp, width = 25.dp)
+        )
     }
 }
 
 
 @Composable
-fun ApplyFilter(viewModel: LandingPageViewModel){
+fun ApplyFilter(viewModel: LandingPageViewModel) {
 
     val categories = viewModel.categories.collectAsState()
-    val options = categories.value.categories
+    val temp = categories.value.categories
+
+
+    val options = ArrayList<String>()
+    if (temp.isNotEmpty()) {
+        options.add("All")
+        for (cat in temp) {
+            options.add(cat)
+        }
+    }
+    val order = arrayOf("Default", "Ascending", "Descending")
 
     var sortOrder by remember { mutableStateOf("") }
     var sortCategory by remember { mutableStateOf("") }
@@ -101,24 +112,31 @@ fun ApplyFilter(viewModel: LandingPageViewModel){
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(0.dp)
-            .padding(5.dp)
+            .padding(15.dp)
     ) {
         Column {
-            val order = arrayOf("Default","Asending","Desending")
-            Text(text = "Search Filters")
-            DropdownFilter(type = "Sort By", options = order.toList()){
-                sortOrder=it
+
+            Text(
+                text = "Search Filters",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(2.dp)
+            )
+            DropdownFilter(type = "Sort By", options = order.toList()) {
+                sortOrder = it
             }
-            DropdownFilter(type = "Category", options = options){
-                sortCategory=it
+            DropdownFilter(type = "Category", options = options) {
+                sortCategory = it
             }
             Button(
-                modifier = Modifier.align(Alignment.End),
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .wrapContentSize(),
                 onClick = {
                     viewModel.applyFilter(sortOrder, sortCategory)
                 }
             ) {
-               Text(text = "Apply", color = Color.White)
+                Text(text = "Apply", color = Color.White)
             }
         }
 
@@ -129,7 +147,7 @@ fun ApplyFilter(viewModel: LandingPageViewModel){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DropdownFilter(type:String,options:List<String>,getSelectedValue:(String) -> Unit = {}){
+fun DropdownFilter(type: String, options: List<String>, getSelectedValue: (String) -> Unit = {}) {
 
     var selectedItem by remember { mutableStateOf("") }
 
@@ -146,7 +164,7 @@ fun DropdownFilter(type:String,options:List<String>,getSelectedValue:(String) ->
         Text(text = type)
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = {expanded=!expanded}) {
+            onExpandedChange = { expanded = !expanded }) {
             Row(
                 modifier = Modifier
                     .background(color = MaterialDefault, shape = Shapes.medium)
@@ -156,19 +174,22 @@ fun DropdownFilter(type:String,options:List<String>,getSelectedValue:(String) ->
                 horizontalArrangement = Arrangement.End,
             ) {
                 Text(text = selectedItem)
-                Icon(painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_keyboard_arrow_down_24), contentDescription = null)
+                Icon(
+                    painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_keyboard_arrow_down_24),
+                    contentDescription = null
+                )
             }
 
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded=false }) {
+                onDismissRequest = { expanded = false }) {
 
-                options.forEach{
+                options.forEach {
                     DropdownMenuItem(
                         onClick = {
                             selectedItem = it
                             getSelectedValue(selectedItem)
-                            expanded=false
+                            expanded = false
                         }) {
                         Text(text = it)
                     }

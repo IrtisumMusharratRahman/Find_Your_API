@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LandingPageViewModel @Inject constructor(
     private val publicApiRepository: PublicApiRepository
-) :ViewModel() {
+) : ViewModel() {
 
     private val _apis = MutableStateFlow<APIs>(APIs(0, emptyList()))
     val apis = _apis.asStateFlow()
@@ -32,54 +32,62 @@ class LandingPageViewModel @Inject constructor(
     private var _isFiltered = MutableStateFlow<Boolean>(false)
     val isFiltered = _isFiltered.asStateFlow()
 
-    fun getSearchedApiList(text:String):ArrayList<Entrie>{
+    fun getSearchedApiList(text: String): ArrayList<Entrie> {
         var filteredList = ArrayList<Entrie>()
 
-        for(ent in apis.value.entries){
-            if (ent.API.lowercase().contains(text.lowercase())){
+        for (ent in apis.value.entries) {
+            if (ent.API.lowercase().contains(text.lowercase())) {
                 filteredList.add(ent)
             }
         }
-        _entries.value=filteredList
+        _entries.value = filteredList
         return filteredList
     }
 
-    fun getAPIs(){
-        viewModelScope.launch{
+    fun getAPIs() {
+        viewModelScope.launch {
             _apis.value = publicApiRepository.getApis()
             _entries.value = _apis.value.entries
         }
     }
 
-    fun getCategories(){
-        viewModelScope.launch{
+    fun getCategories() {
+        viewModelScope.launch {
             _categories.value = publicApiRepository.getCategories()
-            // add kora lagbe
         }
     }
 
-    fun changeFilterStatus(){
+    fun changeFilterStatus() {
         _isFiltered.value = !isFiltered.value
     }
 
-    fun applyFilter(sortOrder:String,sortCategory:String){
-        _isFiltered.value=false
+    fun applyFilter(sortOrder: String, sortCategory: String) {
+        _isFiltered.value = false
 
         var filteredList = ArrayList<Entrie>()
 
-        for (ent in apis.value.entries){
-            if (ent.Category.lowercase().contentEquals(sortCategory)){
+        if (sortCategory == "All") {
+            for (ent in apis.value.entries) {
                 filteredList.add(ent)
             }
-        }
-        when(sortOrder.lowercase()){
-            "asending" -> _entries.value = filteredList.sortedWith(compareBy({ it.API }));
-            "desending" -> _entries.value = filteredList.sortedByDescending{it.API};
-            "default" -> _entries.value = filteredList
 
+        } else {
+            for (ent in apis.value.entries) {
+                if (ent.Category.lowercase().contains(sortCategory.lowercase())) {
+                    filteredList.add(ent)
+                }
+            }
         }
-        if (sortOrder.isNotEmpty()){
 
+
+        if (sortOrder.isNotEmpty()) {
+            when (sortOrder) {
+                "Ascending" -> _entries.value = filteredList.sortedWith(compareBy({ it.API }));
+                "Descending" -> _entries.value = filteredList.sortedByDescending { it.API };
+                "Default" -> _entries.value = filteredList
+            }
+        } else {
+            _entries.value = filteredList
         }
 
     }

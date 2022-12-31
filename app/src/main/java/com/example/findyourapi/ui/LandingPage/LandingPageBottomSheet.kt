@@ -23,7 +23,7 @@ import com.example.findyourapi.ui.theme.Shapes
 import com.example.findyourapi.ui.theme.bg2
 
 @Composable
-fun BottomSheet(entrie: Entrie){
+fun BottomSheet(entrie: Entrie) {
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -39,18 +39,56 @@ fun BottomSheet(entrie: Entrie){
                 .background(color = ContainerBg, shape = Shapes.large)
                 .fillMaxSize()
                 .padding(0.dp)
-//                .shadow(10.dp, Shapes.large)
                 .padding(vertical = 30.dp, horizontal = 40.dp)
 
         ) {
             Column() {
-                Text(text = entrie.API, fontSize = 28.sp, fontWeight = FontWeight.SemiBold, color = Color.White, modifier = Modifier.padding(vertical = 10.dp, horizontal = 5.dp))
-                Text(text = "DESC: ${entrie.Description}", fontSize = 16.sp, fontWeight = FontWeight.Light, color = Color.White, modifier = Modifier.padding(5.dp))
-                Text(text = "CATEGORY: ${entrie.Category}", fontSize = 18.sp, fontWeight = FontWeight.Normal, color = Color.White, modifier = Modifier.padding(5.dp))
-                Text(text = "CORS: ${entrie.Cors}", fontSize = 18.sp, fontWeight = FontWeight.Normal, color = Color.White, modifier = Modifier.padding(5.dp))
-                Text(text = "AUTH: ${entrie.Auth}", fontSize = 18.sp, fontWeight = FontWeight.Normal, color = Color.White, modifier = Modifier.padding(5.dp))
-                Text(text = "HTTPS: ${entrie.HTTPS}", fontSize = 18.sp, fontWeight = FontWeight.Normal, color = Color.White, modifier = Modifier.padding(5.dp))
-                Text(text = "LINK: ${entrie.Link}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFb3d9ff),
+                Text(
+                    text = entrie.API,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White,
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 5.dp)
+                )
+                Text(
+                    text = "DESC: ${entrie.Description}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Light,
+                    color = Color.White,
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(
+                    text = "CATEGORY: ${entrie.Category}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White,
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(
+                    text = "CORS: ${entrie.Cors}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White,
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(
+                    text = "AUTH: ${entrie.Auth}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White,
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(
+                    text = "HTTPS: ${entrie.HTTPS}",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White,
+                    modifier = Modifier.padding(5.dp)
+                )
+                Text(text = "LINK: ${entrie.Link}",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFb3d9ff),
                     modifier = Modifier
                         .padding(5.dp)
                         .clickable {

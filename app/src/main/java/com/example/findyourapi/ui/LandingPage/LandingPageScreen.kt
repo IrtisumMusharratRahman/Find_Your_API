@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.foundation.*
 
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 
@@ -37,7 +36,7 @@ import me.onebone.toolbar.*
 @Composable
 fun LandingPageScreen(
     viewModel: LandingPageViewModel = viewModel()
-){
+) {
     val apis = viewModel.apis.collectAsState()
     viewModel.getAPIs()
     viewModel.getCategories()
@@ -67,18 +66,18 @@ fun LandingPageScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        SearchBar(){
+                        SearchBar() {
                             viewModel.getSearchedApiList(text = it)
                         }
-                        Filter(){
+                        Filter() {
                             viewModel.changeFilterStatus()
                         }
                     }
                     Row(
                         modifier = Modifier
-                            .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
+                            .padding(top = 5.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
                             .fillMaxWidth()
-                            .height(if (isFiltered.value) 150.dp else 0.dp),
+                            .height(if (isFiltered.value) 160.dp else 0.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -87,9 +86,9 @@ fun LandingPageScreen(
                 }
             }
         ) {
-            if (apis.value.count!=0){
+            if (apis.value.count != 0) {
                 LandingPageListView(viewModel = viewModel, entries = entries)
-            }else{
+            } else {
                 LoadingSpinner()
             }
         }
@@ -97,14 +96,12 @@ fun LandingPageScreen(
 }
 
 
-
-
 @Composable
-fun LoadingSpinner(){
+fun LoadingSpinner() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CircularProgressIndicator(
             modifier = Modifier.size(60.dp),
             color = ContainerBg,
@@ -112,20 +109,5 @@ fun LoadingSpinner(){
         )
     }
 
-}
-
-
-
-
-@Preview
-@Composable
-fun DefPrev(){
-    val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link-----------------------------------------","Category")
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ){
-
-    }
 }
 

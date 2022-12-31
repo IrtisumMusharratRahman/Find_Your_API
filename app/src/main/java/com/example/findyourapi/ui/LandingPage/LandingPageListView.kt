@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entrie>>){
+fun LandingPageListView(viewModel: LandingPageViewModel, entries: State<List<Entrie>>) {
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(
@@ -35,7 +35,7 @@ fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entr
     val coroutineScope = rememberCoroutineScope()
 
 
-    val ent = Entrie("API Name","Api Desc","Api auth","Api https","Cors","Link","Category")
+    val ent = Entrie("", "", "", "", "", "", "")
 
     var entrie by remember { mutableStateOf(ent) }
 
@@ -48,13 +48,12 @@ fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entr
             BottomSheet(entrie)
         }
     ) {
-        ApiLst(entries = entries.value){
+        ApiLst(entries = entries.value) {
             coroutineScope.launch {
                 entrie = it
                 bottomSheetScaffoldState.bottomSheetState.expand()
-                if (bottomSheetScaffoldState.bottomSheetState.isAnimationRunning){
+                if (bottomSheetScaffoldState.bottomSheetState.isAnimationRunning) {
                     bottomSheetScaffoldState.bottomSheetState.collapse()
-
                 }
             }
         }
@@ -62,7 +61,7 @@ fun LandingPageListView(viewModel: LandingPageViewModel,entries: State<List<Entr
 }
 
 @Composable
-fun ApiLst(entries: List<Entrie>,onClick: (entrie: Entrie) -> Unit){
+fun ApiLst(entries: List<Entrie>, onClick: (entrie: Entrie) -> Unit) {
     val context = LocalContext.current
     LazyColumn(
         modifier = Modifier.padding(vertical = 10.dp)
@@ -70,7 +69,7 @@ fun ApiLst(entries: List<Entrie>,onClick: (entrie: Entrie) -> Unit){
         items(
             items = entries,
             itemContent = {
-                ApiItem(entrie = it){entrie->
+                ApiItem(entrie = it) { entrie ->
                     onClick(entrie)
                 }
             })
@@ -78,21 +77,39 @@ fun ApiLst(entries: List<Entrie>,onClick: (entrie: Entrie) -> Unit){
 }
 
 @Composable
-fun ApiItem(entrie: Entrie,onClick: (entrie: Entrie) -> Unit){
+fun ApiItem(entrie: Entrie, onClick: (entrie: Entrie) -> Unit) {
     Column(
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment= Alignment.Start,
+        horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .clickable{onClick(entrie)}
+            .clickable { onClick(entrie) }
             .fillMaxWidth()
             .padding(vertical = 5.dp, horizontal = 8.dp)
             .background(ContainerBg, shape = Shapes.large)
             .shadow(elevation = 1.5.dp)
             .padding(20.dp)
     ) {
-        Text(text = entrie.API, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.White, modifier = Modifier.padding(3.dp))
-        Text(text = entrie.Description,fontSize = 16.sp, fontWeight = FontWeight.ExtraLight, color = Color.White, modifier = Modifier.padding(3.dp))
-        Text(text = entrie.Category,fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color.White, modifier = Modifier.padding(3.dp))
+        Text(
+            text = entrie.API,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White,
+            modifier = Modifier.padding(3.dp)
+        )
+        Text(
+            text = entrie.Description,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.ExtraLight,
+            color = Color.White,
+            modifier = Modifier.padding(3.dp)
+        )
+        Text(
+            text = entrie.Category,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White,
+            modifier = Modifier.padding(3.dp)
+        )
     }
 
 }
