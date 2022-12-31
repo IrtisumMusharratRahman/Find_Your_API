@@ -32,7 +32,7 @@ class LandingPageViewModel @Inject constructor(
     private var _isFiltered = MutableStateFlow<Boolean>(false)
     val isFiltered = _isFiltered.asStateFlow()
 
-    fun getFilteredApiList(text:String):ArrayList<Entrie>{
+    fun getSearchedApiList(text:String):ArrayList<Entrie>{
         var filteredList = ArrayList<Entrie>()
 
         for(ent in apis.value.entries){
@@ -54,10 +54,33 @@ class LandingPageViewModel @Inject constructor(
     fun getCategories(){
         viewModelScope.launch{
             _categories.value = publicApiRepository.getCategories()
+            // add kora lagbe
         }
     }
 
     fun changeFilterStatus(){
         _isFiltered.value = !isFiltered.value
+    }
+
+    fun applyFilter(sortOrder:String,sortCategory:String){
+        _isFiltered.value=false
+
+        var filteredList = ArrayList<Entrie>()
+
+        for (ent in apis.value.entries){
+            if (ent.Category.lowercase().contentEquals(sortCategory)){
+                filteredList.add(ent)
+            }
+        }
+        when(sortOrder.lowercase()){
+            "asending" -> _entries.value = filteredList.sortedWith(compareBy({ it.API }));
+            "desending" -> _entries.value = filteredList.sortedByDescending{it.API};
+            "default" -> _entries.value = filteredList
+
+        }
+        if (sortOrder.isNotEmpty()){
+
+        }
+
     }
 }

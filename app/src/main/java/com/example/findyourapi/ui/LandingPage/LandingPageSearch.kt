@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.R
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
@@ -18,9 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.findyourapi.ui.theme.ContainerBg
+import com.example.findyourapi.ui.theme.MaterialDefault
 import com.example.findyourapi.ui.theme.Shapes
 
 
@@ -76,7 +79,7 @@ fun Filter(onCLick:() -> Unit = {}){
         shape = CircleShape,
         onClick = {onCLick()}) {
         Image(
-            painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_filter_list_24),
+            painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_filter_alt_24),
             contentDescription = "",
             modifier = Modifier.size(height = 32.dp, width = 25.dp))
     }
@@ -85,6 +88,12 @@ fun Filter(onCLick:() -> Unit = {}){
 
 @Composable
 fun ApplyFilter(viewModel: LandingPageViewModel){
+
+    val categories = viewModel.categories.collectAsState()
+    val options = categories.value.categories
+
+    var sortOrder by remember { mutableStateOf("") }
+    var sortCategory by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -95,86 +104,76 @@ fun ApplyFilter(viewModel: LandingPageViewModel){
             .padding(5.dp)
     ) {
         Column {
-            Row(
-                modifier = Modifier.padding(0.dp).padding(2.dp)
-            ) {
-                Text(text = "Search Filters")
-                MyUI()
+            val order = arrayOf("Default","Asending","Desending")
+            Text(text = "Search Filters")
+            DropdownFilter(type = "Sort By", options = order.toList()){
+                sortOrder=it
             }
-            Row(
-                modifier = Modifier.padding(0.dp).padding(2.dp)
-            ) {
-                Text(text = "Sort By")
-                MyUI()
+            DropdownFilter(type = "Category", options = options){
+                sortCategory=it
             }
-            Row(
-                modifier = Modifier.padding(0.dp).padding(2.dp)
+            Button(
+                modifier = Modifier.align(Alignment.End),
+                onClick = {
+                    viewModel.applyFilter(sortOrder, sortCategory)
+                }
             ) {
-                Text(text = "Category")
-                MyUI()
+               Text(text = "Apply", color = Color.White)
             }
-//            Text(text = "Search Filters")
-//            Text(text = "Sort By")
-//            Text(text = "Category")
-//            MyUI()
         }
 
     }
 
 }
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MyUI() {
+fun DropdownFilter(type:String,options:List<String>,getSelectedValue:(String) -> Unit = {}){
 
-    val contextForToast = LocalContext.current.applicationContext
+    var selectedItem by remember { mutableStateOf("") }
 
-    val listItems = arrayOf("Favorites", "Options", "Settings", "Share")
+    var expanded by remember { mutableStateOf(false) }
 
-    var selectedItem by remember {
-        mutableStateOf(listItems[0])
-    }
-
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
-    // the box
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
+    Row(
+        modifier = Modifier
+            .padding(0.dp)
+            .padding(2.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
-        // text field
-        TextField(
-            value = selectedItem,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(text = "Label") },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
-        )
-
-        // menu
-        ExposedDropdownMenu(
+        Text(text = type)
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            listItems.forEach { selectedOption ->
-                // menu item
-                DropdownMenuItem(onClick = {
-                    selectedItem = selectedOption
-                    Toast.makeText(contextForToast, selectedOption, Toast.LENGTH_SHORT).show()
-                    expanded = false
-                }) {
-                    Text(text = selectedOption)
+            onExpandedChange = {expanded=!expanded}) {
+            Row(
+                modifier = Modifier
+                    .background(color = MaterialDefault, shape = Shapes.medium)
+                    .padding(0.dp)
+                    .padding(2.dp)
+                    .fillMaxWidth(0.7f),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Text(text = selectedItem)
+                Icon(painter = painterResource(id = com.example.findyourapi.R.drawable.ic_baseline_keyboard_arrow_down_24), contentDescription = null)
+            }
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded=false }) {
+
+                options.forEach{
+                    DropdownMenuItem(
+                        onClick = {
+                            selectedItem = it
+                            getSelectedValue(selectedItem)
+                            expanded=false
+                        }) {
+                        Text(text = it)
+                    }
                 }
+
             }
         }
     }

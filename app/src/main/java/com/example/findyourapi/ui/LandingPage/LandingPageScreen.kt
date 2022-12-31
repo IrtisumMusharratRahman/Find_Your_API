@@ -15,6 +15,8 @@ import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 
 
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,9 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.findyourapi.R
 
 import com.example.findyourapi.model.Entrie
 import com.example.findyourapi.ui.theme.ContainerBg
+import com.example.findyourapi.ui.theme.MaterialDefault
+import com.example.findyourapi.ui.theme.Shapes
 
 import me.onebone.toolbar.*
 
@@ -63,7 +68,7 @@ fun LandingPageScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SearchBar(){
-                            viewModel.getFilteredApiList(text = it)
+                            viewModel.getSearchedApiList(text = it)
                         }
                         Filter(){
                             viewModel.changeFilterStatus()
@@ -73,7 +78,7 @@ fun LandingPageScreen(
                         modifier = Modifier
                             .padding(top = 0.dp, start = 20.dp, end = 20.dp, bottom = 0.dp)
                             .fillMaxWidth()
-                            .height(if (isFiltered.value) 200.dp else 0.dp),
+                            .height(if (isFiltered.value) 150.dp else 0.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -120,6 +125,7 @@ fun DefPrev(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ){
-        BottomSheet(entrie = ent)
+
     }
 }
+
